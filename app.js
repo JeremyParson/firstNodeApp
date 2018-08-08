@@ -1,4 +1,4 @@
-let data;   //variable to store data in
+//variable to store data in
 var mysql      = require('mysql');  //imports mysql package
 var connection = mysql.createConnection({   //creates a connection instance to database
   host     : '10.67.71.7',
@@ -9,12 +9,8 @@ var connection = mysql.createConnection({   //creates a connection instance to d
 
 connection.connect();   //connects to database
 
-connection.query('SELECT * FROM student', function (error, results, fields) {   //querys database for information
-  if (error) throw error   //check if there is an error, if so it will throw it
-  data = results   //sets sata equal to the output of the query
-});
 
-connection.end();   //ends connection to database
+
 
 const express = require('express')  //gets express package
 const bodyParser = require('body-parser')   //gets body-parser package
@@ -31,7 +27,7 @@ const app = express()   //initializes app with MAGIC
 app.use(bodyParser.json()); //Tells the app to use this middleware
 app.use(bodyParser.urlencoded({extended: false}))   //Tells the app to use this middleware
 // app.use(expressvalidator)   //Tells the app to use this middleware
-
+//Test
 app.use(express.static(path.join(__dirname, 'lib')))    //Tells the app to use a specific resouce folder
 
 //view engine
@@ -40,12 +36,18 @@ app.set('views', path.join(__dirname, 'lib')) //DONT KNOW WHAT THIS DOES
 
 
 app.get('/', (req, res) => {    //This is essentialy an event listener for a server, When it recieves a request for a specific path on the server this will execute whatever in the callback function
+    let data
+    connection.query('SELECT * FROM student', (error, results, fields) => {   //querys database for information
+        if (error) throw error   //check if there is an error, if so it will throw it
+        data = results   //sets sata equal to the output of the query
+      });
+
     let userData = data;
-    res.render('index', {
-        title: "My App",
+    res.render('index', {   //res.render's first parameter will get the corrisponing ilename from the specified static libraries
+        title: "My App",    //The Second parameter is an object in which defines page varialbes such as userData and Title
         userData: userData
     })
-    console.log("server is up!");
+    console.log(`A user has connected ${req.connection}`);
 })
 
 app.post('/users/add', (req, res) => {
@@ -66,7 +68,7 @@ app.post('/users/add', (req, res) => {
     }
 
     console.log(`A new form has been submitted! ${newUser}`);
-    res.render("formsubmitted",{
+    res.render(formsubmitted,{
         first_name : newUser.first_name
     })
 })
@@ -76,3 +78,6 @@ app.post('/users/add', (req, res) => {
 app.get('/homepage', (req, res) => res.send(data))
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
+
+
+connection.end();   //ends connection to database
