@@ -20,7 +20,7 @@ const express = require('express')  //gets express package
 const bodyParser = require('body-parser')   //gets body-parser package
 const path = require('path')    //gets path package
 const app = express()   //initializes app with MAGIC
-const expressvalidator = require('express-validator');  //gets expressvalidator package
+// const expressvalidator = require('express-validator');  //gets expressvalidator package
 
 // var logger = function(req, res, next){
 //     console.log('logging...');
@@ -30,7 +30,7 @@ const expressvalidator = require('express-validator');  //gets expressvalidator 
 //body parser middleware
 app.use(bodyParser.json()); //Tells the app to use this middleware
 app.use(bodyParser.urlencoded({extended: false}))   //Tells the app to use this middleware
-app.use(expressvalidator)   //Tells the app to use this middleware
+// app.use(expressvalidator)   //Tells the app to use this middleware
 
 app.use(express.static(path.join(__dirname, 'lib')))    //Tells the app to use a specific resouce folder
 
@@ -66,7 +66,7 @@ app.post('/users/add', (req, res) => {
     }
 
     console.log(`A new form has been submitted! ${newUser}`);
-    res.render(formsubmitted,{
+    res.render("formsubmitted",{
         first_name : newUser.first_name
     })
 })
